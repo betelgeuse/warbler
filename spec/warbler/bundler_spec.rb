@@ -150,14 +150,15 @@ describe Warbler::Jar, "with Bundler" do
     end
   end
 
-  context 'in a trivial bundler app' do
+  context 'in a trivial bundler app', wip: true do
     run_in_directory 'spec/sample_bundler_hello'
 
-    it 'should create jar and be able to run it' do
-      jar_location = File.join(Warbler::WARBLER_HOME, 'tmp/created_jar.jar')
+    let(:jar_location) { File.join(Warbler::WARBLER_HOME, 'tmp/created_jar.jar') }
+
+    it 'should create jar and be able to run it with no environment' do
       jar.apply(config)
       jar.create(jar_location)
-      output = `java -jar #{jar_location}`
+      output = `env -i java -jar #{jar_location}`
       output.should == "Hello World\n"
     end
   end
